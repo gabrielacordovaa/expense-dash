@@ -61,4 +61,9 @@
   
   .new-expense__actions {
     text-align: right;
+    align-self: flex-end;
+  }
+  .new-expense__add{
+    text-align: center;
+    align-self: center;
   }

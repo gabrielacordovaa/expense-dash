@@ -1,32 +1,43 @@
-import './Expenses.scss';
-import ExpenseItem from '../expense-item/ExpenseItem';
-import Card from '../card/Card';
+import "./Expenses.scss";
+import ExpenseItem from "../expense-item/ExpenseItem";
+import Card from "../card/Card";
+import ExpenseFilter from "../expense-filter/ExpenseFilter";
+import React, { useState } from "react";
+import ExpensesChart from "../expenses-chart/ExpensesChart";
 
 const Expenses = (props) => {
-    return(
-        <Card className='expenses'>
-            <ExpenseItem 
-            date={props.items[0].date}
-            title={props.items[0].title}
-            amount={props.items[0].amount}
-            />
-            <ExpenseItem 
-            date={props.items[1].date}
-            title={props.items[1].title}
-            amount={props.items[1].amount}
-            />
-            <ExpenseItem 
-            date={props.items[2].date}
-            title={props.items[2].title}
-            amount={props.items[2].amount}
-            />
-            <ExpenseItem 
-            date={props.items[3].date}
-            title={props.items[3].title}
-            amount={props.items[3].amount}
-            />
-        </Card>
-    );
-}
+  const [selectedValue, setSelectedValue] = useState("2020");
+
+  const selectHandler = (valor) => {
+    setSelectedValue(valor);
+  };
+
+  const filteredValues = props.items.filter((e) => {
+    return e.date.getFullYear().toString() === selectedValue;
+  });
+
+  return (
+    <Card className="expenses">
+      <ExpenseFilter selected={selectedValue} onSelectHandler={selectHandler} />
+      <ExpensesChart expenses={filteredValues} />
+      <li>
+        {filteredValues.length === 0 ? (
+          <p className="expenses-list__fallback"> No content found </p>
+        ) : (
+          filteredValues.map((item, index) => (
+            <ul className="expenses-list">
+              <ExpenseItem
+                key={index}
+                date={item.date}
+                title={item.title}
+                amount={item.amount}
+              />
+            </ul>
+          ))
+        )}
+      </li>
+    </Card>
+  );
+};
 
 export default Expenses;
